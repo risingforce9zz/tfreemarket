@@ -2,6 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../helper/utility.dart';
+
 enum TextEditingControllerStatus { init, clear, dispose }
 
 class AuthController extends GetxController {
@@ -89,4 +91,25 @@ class AuthController extends GetxController {
       }
     }
   }
+
+  /// Error発生時にログイン状態を変更しSnackBarを表示
+  void setAuthErrorMessage(String message) {
+    Utility.customSnackBar('エラー', message);
+  }
+
+  /// アカウント新規作成
+  Future<void> signUp() async {
+    try {
+      await _auth.createUserWithEmailAndPassword(
+          email: emailController.text, password: passwordController.text);
+      firebaseUser.value = _auth.currentUser;
+    } on FirebaseAuthException catch(e) {
+      if (e.code == 'email-already-in-use') {
+        setAuthErrorMessage('このメールアドレスはすでに使用されています。');
+      }
+    } catch (error) {
+      setAuthErrorMessage(error.toString());
+    }
+  }
+
 }

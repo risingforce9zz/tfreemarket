@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 import 'firebase_options.dart';
-import 'pages/splash_screen.dart';
+import './route/app_route.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -33,15 +34,16 @@ class LoginUiApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       title: 'Flutter Login UI',
       theme: ThemeData(
         primaryColor: _primaryColor,
-        accentColor: _accentColor,
+        colorScheme: ColorScheme.fromSwatch().copyWith(secondary: _accentColor),
         scaffoldBackgroundColor: Colors.grey.shade100,
         primarySwatch: Colors.grey,
       ),
-      home: SplashScreen(title: 'Flutter Login UI'),
+      initialRoute: '/',
+      getPages: AppRoutes.routes,
     );
   }
 }
