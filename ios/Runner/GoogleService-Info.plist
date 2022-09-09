@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>65147047369-j65g78n50pr0q3rppti67de58jotbqtm.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.65147047369-j65g78n50pr0q3rppti67de58jotbqtm</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>65147047369-3m8kmmfpv46t0lqblrgt0cgk2ul24lct.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyBagClt7JmsBk5E9ucTEHesmKEefuELCBE</string>
+	<key>GCM_SENDER_ID</key>
+	<string>65147047369</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.imakita3gyo.tfreemarket.tfreemarket</string>
+	<key>PROJECT_ID</key>
+	<string>tshirtsfreemarket</string>
+	<key>STORAGE_BUCKET</key>
+	<string>tshirtsfreemarket.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:65147047369:ios:ceb9acc869aa0c1aa9ec18</string>
+	<key>DATABASE_URL</key>
+	<string>https://tshirtsfreemarket-default-rtdb.firebaseio.com</string>
+</dict>
+</plist>
