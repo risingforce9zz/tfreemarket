@@ -1,7 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
+import '../../controllers/auth_controller.dart';
 import 'login_page.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -16,12 +18,12 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   bool _isVisible = false;
 
+  AuthController authController = Get.put(AuthController());
   _SplashScreenState(){
 
     new Timer(const Duration(milliseconds: 2000), (){
       setState(() {
-        Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (context) => LoginPage()), (route) => false);
+        Get.toNamed('/login');
       });
     });
 
@@ -41,7 +43,7 @@ class _SplashScreenState extends State<SplashScreen> {
     return Container(
       decoration: new BoxDecoration(
         gradient: new LinearGradient(
-          colors: [Theme.of(context).accentColor, Theme.of(context).primaryColor],
+          colors: [Theme.of(context).colorScheme.secondary, Theme.of(context).primaryColor],
           begin: const FractionalOffset(0, 0),
           end: const FractionalOffset(1.0, 0.0),
           stops: [0.0, 1.0],

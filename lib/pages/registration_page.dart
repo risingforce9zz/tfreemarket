@@ -1,25 +1,65 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:get/get.dart';
 
+import '../controllers/auth_controller.dart';
+import '../helper/utility.dart';
 import 'profile_page.dart';
 import '../../common/theme_helper.dart';
 import './widgets/header_widget.dart';
 
-class RegistrationPage extends  StatefulWidget{
-  @override
-  State<StatefulWidget> createState() {
-     return _RegistrationPageState();
+class RegistrationPage extends StatelessWidget {
+  final Rx<bool> checkboxValue = false.obs;
+  final AuthController authController = AuthController.to;
+
+  /// 送信ボタンクリック時に各入力フィールドをチェック
+  /// エラーの場合は、SnackBarを表示する。
+  bool _validate() {
+    // 表示名
+    if (authController.displayNameController.text.isEmpty) {
+      Utility.customSnackBar('入力確認', '表示名を入力してください。', 'warn');
+      return false;
+    }
+    // 氏名
+    if (authController.nameController.text.isEmpty) {
+      Utility.customSnackBar('入力確認', '氏名を入力してください。', 'warn');
+      return false;
+    }
+    // 表示名
+    String val = authController.emailController.text.trim();
+    if (val.isEmpty || !GetUtils.isEmail(val)) {
+      Utility.customSnackBar('入力確認', '有効なメールアドレスを入力してください。', 'warn');
+      return false;
+    }
+    // 携帯電話番号
+    val = authController.phoneNumberController.text;
+    if (!RegExp(r"^0[5789]0-[0-9]{4}-[0-9]{4}$").hasMatch(val)) {
+      Utility.customSnackBar('入力確認', 'xxx-xxxx-xxxxで入力してください。。', 'warn');
+      return false;
+    }
+
+    // パスワード
+    RegExp passValid = RegExp(r"(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W)");
+    val = authController.passwordController.text.trim();
+    if (!passValid.hasMatch(val) || val.length < 8) {
+      Utility.customSnackBar('入力確認', '8文字以上、半角で英数大文字・小文字・数字・記号が各1文字以上', 'warn');
+      return false;
+    }
+    // 利用規約同意
+    if (!checkboxValue.value) {
+      Utility.customSnackBar("入力確認", '利用規約同意が必要です。', 'warn');
+      return false;
+    }
+    return true;
   }
-}
 
-class _RegistrationPageState extends State<RegistrationPage>{
-
-  final _formKey = GlobalKey<FormState>();
-  bool checkedValue = false;
-  bool checkboxValue = false;
+  void _submit() {
+    if (_validate()) {
+      authController.signUp();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +79,6 @@ class _RegistrationPageState extends State<RegistrationPage>{
               child: Column(
                 children: [
                   Form(
-                    key: _formKey,
                     child: Column(
                       children: [
                         GestureDetector(
@@ -49,8 +88,8 @@ class _RegistrationPageState extends State<RegistrationPage>{
                                 padding: EdgeInsets.all(10),
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(100),
-                                  border: Border.all(
-                                      width: 5, color: Colors.white),
+                                  border:
+                                      Border.all(width: 5, color: Colors.white),
                                   color: Colors.white,
                                   boxShadow: [
                                     BoxShadow(
@@ -77,47 +116,45 @@ class _RegistrationPageState extends State<RegistrationPage>{
                             ],
                           ),
                         ),
-                        SizedBox(height: 30,),
-                        Container(
-                          child: TextFormField(
-                            decoration: ThemeHelper().textInputDecoration('First Name', 'Enter your first name'),
-                          ),
-                          decoration: ThemeHelper().inputBoxDecorationShaddow(),
+                        SizedBox(
+                          height: 30,
                         ),
-                        SizedBox(height: 30,),
                         Container(
-                          child: TextFormField(
-                            decoration: ThemeHelper().textInputDecoration('Last Name', 'Enter your last name'),
-                          ),
-                          decoration: ThemeHelper().inputBoxDecorationShaddow(),
-                        ),
-                        SizedBox(height: 20.0),
-                        Container(
-                          child: TextFormField(
-                            decoration: ThemeHelper().textInputDecoration("E-mail address", "Enter your email"),
-                            keyboardType: TextInputType.emailAddress,
-                            validator: (val) {
-                              if(!(val!.isEmpty) && !RegExp(r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$").hasMatch(val)){
-                                return "Enter a valid email address";
-                              }
-                              return null;
-                            },
-                          ),
-                          decoration: ThemeHelper().inputBoxDecorationShaddow(),
-                        ),
-                        SizedBox(height: 20.0),
-                        Container(
-                          child: TextFormField(
+                          child: TextField(
                             decoration: ThemeHelper().textInputDecoration(
-                                "Mobile Number",
-                                "Enter your mobile number"),
+                                '表示名', '表示名を入力してください'),
+                            controller: authController.displayNameController,
+                          ),
+                          decoration: ThemeHelper().inputBoxDecorationShaddow(),
+                        ),
+                        SizedBox(
+                          height: 30,
+                        ),
+                        Container(
+                          child: TextField(
+                            decoration: ThemeHelper().textInputDecoration(
+                                '氏名(非表示)', '氏名を入力してください。'),
+                            controller: authController.nameController,
+                          ),
+                          decoration: ThemeHelper().inputBoxDecorationShaddow(),
+                        ),
+                        SizedBox(height: 20.0),
+                        Container(
+                          child: TextField(
+                            decoration: ThemeHelper().textInputDecoration(
+                                "メールアドレス", "メールアドレスを入力してください。"),
+                            keyboardType: TextInputType.emailAddress,
+                            controller: authController.emailController,
+                          ),
+                          decoration: ThemeHelper().inputBoxDecorationShaddow(),
+                        ),
+                        SizedBox(height: 20.0),
+                        Container(
+                          child: TextField(
+                            decoration: ThemeHelper().textInputDecoration(
+                                "携帯電話番号", "携帯電話番号を入力してください。"),
                             keyboardType: TextInputType.phone,
-                            validator: (val) {
-                              if(!(val!.isEmpty) && !RegExp(r"^(\d+)*$").hasMatch(val)){
-                                return "Enter a valid phone number";
-                              }
-                              return null;
-                            },
+                            controller: authController.phoneNumberController,
                           ),
                           decoration: ThemeHelper().inputBoxDecorationShaddow(),
                         ),
@@ -126,13 +163,8 @@ class _RegistrationPageState extends State<RegistrationPage>{
                           child: TextFormField(
                             obscureText: true,
                             decoration: ThemeHelper().textInputDecoration(
-                                "Password*", "Enter your password"),
-                            validator: (val) {
-                              if (val!.isEmpty) {
-                                return "Please enter your password";
-                              }
-                              return null;
-                            },
+                                "パスワード", "パスワードを入力してください。"),
+                            controller: authController.passwordController,
                           ),
                           decoration: ThemeHelper().inputBoxDecorationShaddow(),
                         ),
@@ -143,15 +175,16 @@ class _RegistrationPageState extends State<RegistrationPage>{
                               children: <Widget>[
                                 Row(
                                   children: <Widget>[
-                                    Checkbox(
-                                        value: checkboxValue,
+                                   Obx(()=> Checkbox(
+                                        value: checkboxValue.value,
                                         onChanged: (value) {
-                                          setState(() {
-                                            checkboxValue = value!;
-                                            state.didChange(value);
-                                          });
+                                          checkboxValue.value = !checkboxValue.value;
                                         }),
-                                    Text("I accept all terms and conditions.", style: TextStyle(color: Colors.grey),),
+                                   ),
+                                    Text(
+                                      "利用規約に同意します。",
+                                      style: TextStyle(color: Colors.grey),
+                                    ),
                                   ],
                                 ),
                                 Container(
@@ -159,112 +192,37 @@ class _RegistrationPageState extends State<RegistrationPage>{
                                   child: Text(
                                     state.errorText ?? '',
                                     textAlign: TextAlign.left,
-                                    style: TextStyle(color: Theme.of(context).errorColor,fontSize: 12,),
+                                    style: TextStyle(
+                                      color: Theme.of(context).errorColor,
+                                      fontSize: 12,
+                                    ),
                                   ),
                                 )
                               ],
                             );
                           },
-                          validator: (value) {
-                            if (!checkboxValue) {
-                              return 'You need to accept terms and conditions';
-                            } else {
-                              return null;
-                            }
-                          },
                         ),
                         SizedBox(height: 20.0),
                         Container(
-                          decoration: ThemeHelper().buttonBoxDecoration(context),
+                          decoration:
+                              ThemeHelper().buttonBoxDecoration(context),
                           child: ElevatedButton(
-                            style: ThemeHelper().buttonStyle(),
-                            child: Padding(
-                              padding: const EdgeInsets.fromLTRB(40, 10, 40, 10),
-                              child: Text(
-                                "Register".toUpperCase(),
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white,
+                              style: ThemeHelper().buttonStyle(),
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.fromLTRB(40, 10, 40, 10),
+                                child: Text(
+                                  "登録",
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                  ),
                                 ),
                               ),
-                            ),
-                            onPressed: () {
-                              if (_formKey.currentState!.validate()) {
-                                Navigator.of(context).pushAndRemoveUntil(
-                                    MaterialPageRoute(
-                                        builder: (context) => ProfilePage()
-                                    ),
-                                        (Route<dynamic> route) => false
-                                );
-                              }
-                            },
-                          ),
-                        ),
-                        SizedBox(height: 30.0),
-                        Text("Or create account using social media",  style: TextStyle(color: Colors.grey),),
-                        SizedBox(height: 25.0),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            GestureDetector(
-                              child: FaIcon(
-                                FontAwesomeIcons.googlePlus, size: 35,
-                                color: HexColor("#EC2D2F"),),
-                              onTap: () {
-                                setState(() {
-                                  showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return ThemeHelper().alartDialog("Google Plus","You tap on GooglePlus social icon.",context);
-                                    },
-                                  );
-                                });
-                              },
-                            ),
-                            SizedBox(width: 30.0,),
-                            GestureDetector(
-                              child: Container(
-                                padding: EdgeInsets.all(0),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(100),
-                                  border: Border.all(width: 5, color: HexColor("#40ABF0")),
-                                  color: HexColor("#40ABF0"),
-                                ),
-                                child: FaIcon(
-                                  FontAwesomeIcons.twitter, size: 23,
-                                  color: HexColor("#FFFFFF"),),
-                              ),
-                              onTap: () {
-                                setState(() {
-                                  showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return ThemeHelper().alartDialog("Twitter","You tap on Twitter social icon.",context);
-                                    },
-                                  );
-                                });
-                              },
-                            ),
-                            SizedBox(width: 30.0,),
-                            GestureDetector(
-                              child: FaIcon(
-                                FontAwesomeIcons.facebook, size: 35,
-                                color: HexColor("#3E529C"),),
-                              onTap: () {
-                                setState(() {
-                                  showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return ThemeHelper().alartDialog("Facebook",
-                                          "You tap on Facebook social icon.",
-                                          context);
-                                    },
-                                  );
-                                });
-                              },
-                            ),
-                          ],
+                              onPressed: () {
+                                _submit();
+                              }),
                         ),
                       ],
                     ),
@@ -277,5 +235,4 @@ class _RegistrationPageState extends State<RegistrationPage>{
       ),
     );
   }
-
 }
