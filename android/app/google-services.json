@@ -1,0 +1,91 @@
+{
+  "project_info": {
+    "project_number": "65147047369",
+    "firebase_url": "https://tshirtsfreemarket-default-rtdb.firebaseio.com",
+    "project_id": "tshirtsfreemarket",
+    "storage_bucket": "tshirtsfreemarket.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:65147047369:android:6e7f4e03f4305567a9ec18",
+        "android_client_info": {
+          "package_name": "com.imakita3gyo.frema.t_free_market"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "65147047369-3m8kmmfpv46t0lqblrgt0cgk2ul24lct.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.imakita3gyo.frema.t_free_market",
+            "certificate_hash": "24241b9253bf9a58376d0b0adabd6ceb0260f777"
+          }
+        },
+        {
+          "client_id": "65147047369-c8ep7icieajfbq3vle2q44uu4ricmilh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBQOa-mfSiUUFDcRNxXCzfqTjbcTiYkW9c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "65147047369-c8ep7icieajfbq3vle2q44uu4ricmilh.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "65147047369-i1qddo25inana8aes4bphrfbl1e4q068.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.imakita3gyo.frema.tFreeMarket"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:65147047369:android:76fe842f8a728a3ca9ec18",
+        "android_client_info": {
+          "package_name": "com.imakita3gyo.tfreemarket.tfreemarket"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "65147047369-c8ep7icieajfbq3vle2q44uu4ricmilh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBQOa-mfSiUUFDcRNxXCzfqTjbcTiYkW9c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "65147047369-c8ep7icieajfbq3vle2q44uu4ricmilh.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "65147047369-i1qddo25inana8aes4bphrfbl1e4q068.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.imakita3gyo.frema.tFreeMarket"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
