@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:tfreemarket/controllers/auth_controller.dart';
 
 import '../common/theme_helper.dart';
 import 'widgets/header_widget.dart';
 
 
 class SelectSignInPage extends StatelessWidget{
-  const SelectSignInPage({Key? key}): super(key:key);
-
+  SelectSignInPage({Key? key}): super(key:key);
+  final AuthController authController = AuthController.to;
   final double _headerHeight = 250;
 
   @override
@@ -67,6 +68,7 @@ class SelectSignInPage extends StatelessWidget{
                               ]
                           ),
                           onPressed: (){
+                              authController.signInWithTwitter();
                           },
                         ),
                       ),

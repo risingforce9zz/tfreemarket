@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
+import 'package:twitter_login/twitter_login.dart';
 
 import '../helper/utility.dart';
 import '../pages/select_signin_page.dart';
@@ -140,10 +142,34 @@ class AuthController extends GetxController {
   Future<void> passwordReset() async {
     try {
       _auth.sendPasswordResetEmail(email: emailController.text);
-      Get.offAll(const SelectSignInPage());
+      Get.offAll(SelectSignInPage());
     } catch (error) {
       setAuthErrorMessage('パスワードリセットでエラーが発生しました。');
     }
+  }
+
+  /// Twitterログイン
+  signInWithTwitter() async {
+    // TwitterLoginのインスタンス化
+    final twitterLogin = TwitterLogin(
+        apiKey: dotenv.env['TWITTER_API_KEY']!,
+        apiSecretKey: dotenv.env['TWITTER_API_SECRET_KEY']!,
+        redirectURI: dotenv.env['TWITTER_REDIRECT_URI']!);
+
+    // Twitterサインイン　フロー開始
+    final authResult = await twitterLogin.login();
+    String accessToken = authResult.authToken!;
+    String accessTokenSecret = authResult.authTokenSecret!;
+    String screenName = authResult.user!.screenName;
+    String twitterThumbnailImage = authResult.user!.thumbnailImage;
+    String name = authResult.user!.name;
+
+    // アクセストークンからcredentialを作成
+    final twitterAuthCredential = TwitterAuthProvider.credential(
+        accessToken: accessToken, secret: accessTokenSecret);
+
+    // firebaseのcredentialを作成
+    await _auth.signInWithCredential(twitterAuthCredential);
   }
 
 }
