@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../helper/utility.dart';
+import '../pages/select_signin_page.dart';
 
 enum TextEditingControllerStatus { init, clear, dispose }
 
@@ -82,8 +83,8 @@ class AuthController extends GetxController {
   handleAuthChanged(_firebaseUser) async {
     if (_firebaseUser == null) {
       handleTextEditingControllers(TextEditingControllerStatus.clear);
-      if (Get.currentRoute != '/login') {
-        Get.toNamed('/login');
+      if (Get.currentRoute != '/select-signin') {
+        Get.toNamed('/select-signin');
       }
     } else {
       if (Get.currentRoute != '/profile') {
@@ -109,6 +110,39 @@ class AuthController extends GetxController {
       }
     } catch (error) {
       setAuthErrorMessage(error.toString());
+    }
+  }
+
+  /// Email, passwordでサインイン
+  Future<void> signIn() async {
+    try {
+      await _auth.signInWithEmailAndPassword(
+          email: emailController.text, password: passwordController.text);
+      firebaseUser.value = _auth.currentUser;
+    } on FirebaseException catch (e) {
+      if (e.code == 'user-not-found') {
+        Utility.customSnackBar('エラー', 'このEmailではユーザ登録されていません。');
+      } else {
+        Utility.customSnackBar('エラー', e.message ?? 'サインイン時に特定できないエラーが発生しました。');
+      }
+    } catch (e) {
+      Utility.customSnackBar('エラー', e.toString());
+    }
+  }
+
+  /// サインアウト
+  void singOut() async {
+    await _auth.signOut();
+    firebaseUser.value = _auth.currentUser;
+  }
+
+  ///パスワードリセット
+  Future<void> passwordReset() async {
+    try {
+      _auth.sendPasswordResetEmail(email: emailController.text);
+      Get.offAll(const SelectSignInPage());
+    } catch (error) {
+      setAuthErrorMessage('パスワードリセットでエラーが発生しました。');
     }
   }
 

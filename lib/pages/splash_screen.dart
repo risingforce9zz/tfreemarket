@@ -23,7 +23,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
     new Timer(const Duration(milliseconds: 2000), (){
       setState(() {
-        Get.toNamed('/login');
+        Get.toNamed('/select-signin');
       });
     });
 

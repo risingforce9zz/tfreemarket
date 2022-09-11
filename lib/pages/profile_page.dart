@@ -2,6 +2,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:tfreemarket/controllers/auth_controller.dart';
+import '../common/theme_helper.dart';
 import './login_page.dart';
 import './splash_screen.dart';
 import './widgets/header_widget.dart';
@@ -20,6 +22,7 @@ class ProfilePage extends StatefulWidget{
 
 class _ProfilePageState extends State<ProfilePage>{
 
+  AuthController authController = AuthController.to;
   double  _drawerIconSize = 24;
   double _drawerFontSize = 17;
 
@@ -229,7 +232,27 @@ class _ProfilePageState extends State<ProfilePage>{
                               ],
                             ),
                           ),
-                        )
+                        ),
+                        Container(
+                          decoration:
+                          ThemeHelper().buttonBoxDecoration(context),
+                          child: ElevatedButton(
+                              style: ThemeHelper().buttonStyle(),
+                              child: const Padding(
+                                padding: EdgeInsets.fromLTRB(40, 10, 40, 10),
+                                child: Text(
+                                  "サインアウト",
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                              onPressed: () {
+                                authController.singOut();
+                              }),
+                        ),
                       ],
                     ),
                   )
