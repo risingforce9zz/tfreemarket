@@ -1,9 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:twitter_login/twitter_login.dart';
 
+import '../firebase_options.dart';
 import '../helper/utility.dart';
 import '../pages/select_signin_page.dart';
 
@@ -170,6 +173,39 @@ class AuthController extends GetxController {
 
     // firebaseのcredentialを作成
     await _auth.signInWithCredential(twitterAuthCredential);
+  }
+
+  /// Googleサインイン
+  signInWithGoogle() async {
+    // 認証フローの開始
+    final GoogleSignInAccount? googleUser = await GoogleSignIn(
+        clientId: DefaultFirebaseOptions.currentPlatform.iosClientId)
+        .signIn();
+
+    // 認証情報詳細を取得
+    final GoogleSignInAuthentication? googleAuth =
+    await googleUser?.authentication;
+
+    // クレデンシャルの作成
+    final credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth?.accessToken,
+      idToken: googleAuth?.idToken,
+    );
+
+    // サインインに成功するとユーザークレデンシャルが返る
+    UserCredential userCredential =
+    await FirebaseAuth.instance.signInWithCredential(credential);
+
+  }
+
+  /// AppleIDでサインイン
+  signInWithApple() async {
+    final appleProvider = AppleAuthProvider();
+    if (kIsWeb) {
+      await _auth.signInWithPopup(appleProvider);
+    } else {
+      await _auth.signInWithAuthProvider(appleProvider);
+    }
   }
 
 }

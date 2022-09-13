@@ -87,6 +87,7 @@ class SelectSignInPage extends StatelessWidget{
                               ]
                           ),
                           onPressed: (){
+                            authController.signInWithGoogle();
                           },
                         ),
                       ),
@@ -105,6 +106,7 @@ class SelectSignInPage extends StatelessWidget{
                               ]
                           ),
                           onPressed: (){
+                            authController.signInWithApple();
                           },
                         ),
                       ),

@@ -12,7 +12,8 @@ class AppRoutes {
   AppRoutes._();
 
   static final routes = [
-    GetPage(name: '/', page: () => SplashScreen(title: "")),
+    //GetPage(name: '/', page: () => SplashScreen(title: "")),
+    GetPage(name: '/', page: () => ForgotPasswordVerificationPage()),
     GetPage(name: '/select-signin', page: () => SelectSignInPage()),
     GetPage(name: '/login', page: () => LoginPage()),
     GetPage(name: '/forgotpassword', page: () => ForgotPasswordPage()),

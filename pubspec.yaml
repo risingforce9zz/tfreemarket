@@ -49,6 +49,7 @@ dependencies:
   get: ^4.6.5
   flutter_dotenv: ^5.0.2
   twitter_login: ^4.2.3
+  google_sign_in: ^5.4.1
 
 dev_dependencies:
   flutter_test:
